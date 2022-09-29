@@ -1,5 +1,10 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+function IDText() {
+  const route = useRoute();
+  return <Text style={styles.text}>id: {route.params.id}</Text>;
+}
 
 function DetailScreen({route, navigation}) {
   useEffect(() => {

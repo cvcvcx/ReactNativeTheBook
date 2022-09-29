@@ -1,28 +1,24 @@
-import React, {useEffect} from 'react';
-import {View, Button} from 'react-native';
+import React from 'react';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {Text, Button, View} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
+function OpenDetailButton() {
+  const navigation = useNavigation();
+
+  return (
+    <Button
+      title="Detail 1 열기"
+      onPress={() => navigation.push('Detail', {id: 1})}
+    />
+  );
+}
 function HomeScreen({navigation}) {
-  useEffect(() => {
-    navigation.setOptions({title: '홈'});
-  }, [navigation]);
   return (
     <View>
-      <Button
-        title="Detail1 열기"
-        onPress={() => navigation.navigate('Detail', {id: 1})}
-      />
-      <Button
-        title="Detail2 열기"
-        onPress={() => navigation.navigate('Detail', {id: 2})}
-      />
-      <Button
-        title="Detail3 열기"
-        onPress={() => navigation.navigate('Detail', {id: 3})}
-      />
-      <Button
-        title="HeaderlessScreen 열기"
-        onPress={() => navigation.push('Headerless', {id: 3})}
-      />
+      <Text>Home</Text>
+      <OpenDetailButton />
     </View>
   );
 }
