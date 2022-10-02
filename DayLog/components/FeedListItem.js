@@ -1,5 +1,22 @@
 import React from 'react';
 import {Platform, Pressable, StyleSheet, Text} from 'react-native';
+import {format, formatDistanceToNow} from 'date-fns';
+import {ko} from 'date-fns/locale';
+import {useNavigation} from '@react-navigation/native';
+
+function formatDate(date) {
+  const d = new Date(date);
+  const now = Date.now();
+  const diff = (now - d.getTime()) / 1000;
+
+  if (diff < 60 * 1) {
+    //글 작성시 시간과 지금 시간의 차이가 1분도 안날때
+    return '방금 전';
+  } else if (diff < 60 * 60 * 24 * 3) {
+    return formatDistanceToNow(d, {addSuffix: true, locale: ko});
+  }
+  return format(d, 'PPP EEE p', {locale: ko});
+}
 
 function truncate(text) {
   const replaced = text.replace(/\n/g, ' ');
@@ -11,14 +28,21 @@ function truncate(text) {
 
 function FeedListItem({log}) {
   const {title, body, date} = log;
+  const navigation = useNavigation();
+  const onPress = () => {
+    navigation.navigate('Write', {
+      log,
+    });
+  };
   return (
     <Pressable
       style={({pressed}) => [
         styles.block,
         Platform.OS === 'ios' && pressed && {backgroundColor: '#efefef'},
       ]}
+      onPress={onPress}
       android_ripple={{color: '#ededed'}}>
-      <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text>
+      <Text style={styles.date}>{formatDate(date)}</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.body}>{truncate(body)}</Text>
     </Pressable>

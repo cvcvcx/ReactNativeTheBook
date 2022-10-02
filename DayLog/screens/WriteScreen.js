@@ -6,9 +6,11 @@ import WriteEditor from '../components/WriteEditor';
 import WriteHeader from './WriteHeader';
 import LogContext from '../contexts/LogContext';
 
-function WriteScreen() {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+function WriteScreen({route}) {
+  const log = route.params?.log;
+
+  const [title, setTitle] = useState(log?.title ?? '');
+  const [body, setBody] = useState(log?.body ?? '');
   const navigation = useNavigation();
 
   const {onCreate} = useContext(LogContext);
@@ -16,7 +18,7 @@ function WriteScreen() {
     onCreate({
       title,
       body,
-      date: new Date().toISOString,
+      date: new Date().toISOString(),
     });
     navigation.pop();
   };
