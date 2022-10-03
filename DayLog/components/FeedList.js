@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import FeedListItem from './FeedListItem';
 
-function FeedList({logs, onScrolledToBottom}) {
+function FeedList({logs, onScrolledToBottom, ListHeaderComponent}) {
   const onScroll = e => {
     if (!onScrolledToBottom) {
       return;
@@ -17,9 +17,7 @@ function FeedList({logs, onScrolledToBottom}) {
       distanceFromBottom < 72
     ) {
       onScrolledToBottom(true);
-      console.log('바닥과 가까워요');
     } else {
-      console.log('바닥과 멀어졌어요');
       onScrolledToBottom(false);
     }
   };
@@ -27,10 +25,13 @@ function FeedList({logs, onScrolledToBottom}) {
     <FlatList
       data={logs}
       style={styles.block}
+      //data 에서 ({item, index, separators})를 가져와서 사용함
       renderItem={({item}) => <FeedListItem log={item} />}
       keyExtractor={log => log.id}
+      //항목들 사이에 구분선을 만들기 위한 속성
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       onScroll={onScroll}
+      ListHeaderComponent={ListHeaderComponent}
     />
   );
 }

@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
-import {StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import {StyleSheet, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WriteEditor from '../components/WriteEditor';
 import WriteHeader from './WriteHeader';
@@ -12,22 +12,58 @@ function WriteScreen({route}) {
   const [title, setTitle] = useState(log?.title ?? '');
   const [body, setBody] = useState(log?.body ?? '');
   const navigation = useNavigation();
-
-  const {onCreate} = useContext(LogContext);
+  const [date, setDate] = useState(log ? new Date(log.date) : new Date());
+  //onModify도 context를 통해 가져옴
+  const {onCreate, onModify, onRemove} = useContext(LogContext);
   const onSave = () => {
-    onCreate({
-      title,
-      body,
-      date: new Date().toISOString(),
-    });
+    if (log) {
+      onModify({
+        id: log.id,
+        date: date.toISOString(),
+        title,
+        body,
+      });
+    } else {
+      onCreate({
+        title,
+        body,
+        date: date.toISOString(),
+      });
+    }
     navigation.pop();
+  };
+  const onAskRemove = () => {
+    Alert.alert(
+      '삭제',
+      '정말로 삭제하시겠어요?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: () => {
+            onRemove(log?.id);
+            navigation.pop();
+          },
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
   };
   return (
     <SafeAreaView style={styles.block}>
       <KeyboardAvoidingView
         style={styles.avoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <WriteHeader onSave={onSave} />
+        <WriteHeader
+          onSave={onSave}
+          onAskRemove={onAskRemove}
+          isEditing={!!log}
+          date={date}
+          onChangeDate={setDate}
+        />
         <WriteEditor
           title={title}
           body={body}
