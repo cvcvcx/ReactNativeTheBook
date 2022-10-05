@@ -15,7 +15,7 @@ import IconRightButton from '../components/IconRightButton';
 import storage from '@react-native-firebase/storage';
 import {useUserContext} from '../contexts/UserContext';
 import {v4} from 'uuid';
-import {createPost} from '../lib/posts';
+import {createPost, getPosts} from '../lib/posts';
 function UploadScreen() {
   const route = useRoute();
   const {res} = route.params || {};

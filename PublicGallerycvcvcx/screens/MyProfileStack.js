@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 function MyProfileStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Feed" component={MyProfileScreen} />
     </Stack.Navigator>
   );

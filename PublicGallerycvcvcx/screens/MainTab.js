@@ -31,7 +31,7 @@ function MainTab() {
             component={MyProfileStack}
             options={{
               tabBarIcon: ({color}) => (
-                <Icon name="home" size={24} color={color} />
+                <Icon name="people" size={24} color={color} />
               ),
             }}
           />
