@@ -2,50 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   View,
   Text,
   RefreshControl,
 } from 'react-native';
-import {getPosts, getNewerPosts, getOlderPosts, PAGE_SIZE} from '../lib/posts';
 import {getUser} from '../lib/users';
 import Avatar from './Avatar';
 import PostGridItem from './PostGridItem';
+import usePosts from '../hooks/usePosts';
+import {useUserContext} from '../contexts/UserContext';
+import events from '../lib/events';
 function Profile({userId}) {
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState(null);
-
-  const [noMorePost, setNoMorePost] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onLoadMore = async () => {
-    if (noMorePost || !posts || posts.length < PAGE_SIZE) {
-      return;
-    }
-    const lastPost = posts[posts.length - 1];
-    const olderPosts = await getOlderPosts(lastPost.id, userId);
-    if (olderPosts.length < PAGE_SIZE) {
-      setNoMorePost(true);
-    }
-    setPosts(posts.concat(olderPosts));
-  };
-  const onRefresh = async () => {
-    if (!posts || posts.length === 0 || refreshing) {
-      return;
-    }
-    const firstPost = posts[0];
-    setRefreshing(true);
-    const newerPosts = await getNewerPosts(firstPost.id, userId);
-    setRefreshing(false);
-    if (newerPosts.length === 0) {
-      return;
-    }
-    setPosts(newerPosts.concat(posts));
-  };
+  const {posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost} =
+    usePosts(userId);
+  const {user: me} = useUserContext();
+  const isMyProfile = me.id === userId;
   useEffect(() => {
     getUser(userId).then(setUser);
-    getPosts({userId}).then(setPosts);
   }, [userId]);
   if (!user || !posts) {
     return (
@@ -64,6 +39,20 @@ function Profile({userId}) {
           <Avatar source={user.photoURL && {uri: user.photoURL}} size={128} />
           <Text style={styles.username}>{user.displayName}</Text>
         </View>
+      }
+      onEndReached={onLoadMore}
+      onEndReachedThreshold={0.25}
+      ListFooterComponent={
+        !noMorePost && (
+          <ActivityIndicator
+            style={styles.bottomSpinner}
+            size={32}
+            color="#6200ee"
+          />
+        )
+      }
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
       }
     />
   );
@@ -86,6 +75,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 24,
     color: '#424242',
+  },
+  bottomSpinner: {
+    height: 128,
   },
 });
 export default Profile;

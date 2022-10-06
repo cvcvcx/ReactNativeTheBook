@@ -38,3 +38,13 @@ export async function getOlderPosts(id, userId) {
 export async function getNewerPosts(id, userId) {
   return getPosts({id, mode: 'newer', userId});
 }
+
+export async function removePost(id) {
+  return postsCollection.doc(id).delete();
+}
+
+export function updatePost({id, description}) {
+  return postsCollection.doc(id).update({
+    description,
+  });
+}
