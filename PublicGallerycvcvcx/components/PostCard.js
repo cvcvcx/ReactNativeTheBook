@@ -6,7 +6,9 @@ import {useUserContext} from '../contexts/UserContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import usePostActions from '../hooks/usePostActions';
 import ActionSheetModal from './ActionSheetModal';
-function PostCard({user, photoURL, description, createdAt, id}) {
+import MyProfileStack from '../screens/MyProfileStack';
+import IconButton from './IconButton';
+function PostCard({user, photoURL, description, createdAt, id, isLiked}) {
   const navigation = useNavigation();
   const routeNames = useNavigationState(state => state.routeNames);
   const {user: me} = useUserContext();
@@ -19,6 +21,9 @@ function PostCard({user, photoURL, description, createdAt, id}) {
   const onOpenProfile = () => {
     if (routeNames.find(routeName => routeName === 'MyProfile')) {
       navigation.navigate('MyProfile');
+    } else if (isMyPost) {
+      console.log(routeNames);
+      navigation.getParent().navigate(MyProfileStack, {screen: 'MyProfile'});
     } else {
       navigation.navigate('Profile', {
         userId: user.id,
@@ -56,6 +61,7 @@ function PostCard({user, photoURL, description, createdAt, id}) {
             {date.toLocaleString()}
           </Text>
         </View>
+        <IconButton postUserId={id} />
       </View>
       <ActionSheetModal
         visible={isSelecting}

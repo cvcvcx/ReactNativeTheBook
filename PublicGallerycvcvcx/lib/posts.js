@@ -1,13 +1,14 @@
-import firestore from '@react-native-firebase/firestore';
-
-const postsCollection = firestore().collection('posts');
-
+import firestore, {firebase} from '@react-native-firebase/firestore';
+const db = firebase.firestore();
+const postsCollection = db.collection('posts');
+const likePostCollection = db.collection('likePost');
 export function createPost({user, photoURL, description}) {
   return postsCollection.add({
     user,
     photoURL,
     description,
     createdAt: firestore.FieldValue.serverTimestamp(),
+    likedUser: [],
   });
 }
 
@@ -43,8 +44,27 @@ export async function removePost(id) {
   return postsCollection.doc(id).delete();
 }
 
-export function updatePost({id, description}) {
+export async function updatePost({id, description}) {
+  //update
   return postsCollection.doc(id).update({
     description,
   });
+}
+export async function likedPost({id, displayName}) {
+  console.log(displayName);
+  console.log(id);
+
+  const likedPostvar = await postsCollection.doc(id).update({
+    likedUser: firestore.FieldValue.arrayUnion(displayName),
+  });
+  return likedPostvar;
+}
+export async function UnlikedPost({id, displayName}) {
+  console.log(displayName);
+  console.log(id);
+
+  const UnlikedPost = await postsCollection.doc(id).update({
+    likedUser: firestore.FieldValue.arrayRemove(displayName),
+  });
+  return UnlikedPost;
 }

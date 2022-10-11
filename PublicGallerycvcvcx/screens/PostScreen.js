@@ -25,6 +25,7 @@ function PostScreen() {
         photoURL={post.photoURL}
         description={post.description}
         createdAt={post.createdAt}
+        isLiked={true}
         id={post.id}
       />
     </ScrollView>

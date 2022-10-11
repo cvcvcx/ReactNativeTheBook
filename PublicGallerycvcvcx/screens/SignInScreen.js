@@ -40,6 +40,7 @@ function SignInScreen({navigation, route}) {
       const {user} = isSignUp ? await signUp(info) : await signIn(info);
       const profile = await getUser(user.uid);
       if (!profile) {
+        //프로필이 없으면 Welcome페이지와 같이 uid를 넘겨준다.
         navigation.navigate('Welcome', {uid: user.uid});
       } else {
         setUser(profile);

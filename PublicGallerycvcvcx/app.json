@@ -30,6 +30,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-  }
+    },
+    "sdkVersion": "46.0.0",
+    "entryPoint": ".vscode/exponentIndex.js"
+  },
+  "name": "publicgallerycvcvcx"
 }

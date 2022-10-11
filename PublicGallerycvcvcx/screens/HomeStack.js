@@ -4,7 +4,6 @@ import React from 'react';
 import FeedScreen from './FeedScreen';
 import ProfileScreen from './ProfileScreen';
 import PostScreen from './PostScreen';
-
 const Stack = createNativeStackNavigator();
 
 function HomeStack() {
