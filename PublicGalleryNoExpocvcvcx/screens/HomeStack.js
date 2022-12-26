@@ -9,17 +9,15 @@ const Stack = createNativeStackNavigator();
 
 function HomeStack() {
   return (
-    <LikeContextProvider>
-      <Stack.Navigator>
-        <Stack.Screen name="Feed" component={FeedScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen
-          name="Post"
-          component={PostScreen}
-          options={{title: '게시물'}}
-        />
-      </Stack.Navigator>
-    </LikeContextProvider>
+    <Stack.Navigator>
+      <Stack.Screen name="Feed" component={FeedScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen
+        name="Post"
+        component={PostScreen}
+        options={{title: '게시물'}}
+      />
+    </Stack.Navigator>
   );
 }
 

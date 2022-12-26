@@ -7,9 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import usePostActions from '../hooks/usePostActions';
 import ActionSheetModal from './ActionSheetModal';
 import MyProfileStack from '../screens/MyProfileStack';
-import IconButton from './IconButton';
-import {useLikeContext} from '../contexts/LikeContext';
-function PostCard({user, photoURL, description, createdAt, id, likedUser}) {
+function PostCard({user, photoURL, description, createdAt, id}) {
   const navigation = useNavigation();
   const routeNames = useNavigationState(state => state.routeNames);
   const {user: me} = useUserContext();
@@ -18,6 +16,7 @@ function PostCard({user, photoURL, description, createdAt, id, likedUser}) {
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
     [createdAt],
   );
+
   const onOpenProfile = () => {
     if (routeNames.find(routeName => routeName === 'MyProfile')) {
       navigation.navigate('MyProfile');
@@ -61,7 +60,6 @@ function PostCard({user, photoURL, description, createdAt, id, likedUser}) {
             {date.toLocaleString()}
           </Text>
         </View>
-        <IconButton postUserId={id} />
       </View>
       <ActionSheetModal
         visible={isSelecting}

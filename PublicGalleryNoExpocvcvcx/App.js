@@ -11,11 +11,9 @@ import {LikeContextProvider} from './contexts/LikeContext';
 function App() {
   return (
     <UserContextProvider>
-      <LikeContextProvider>
-        <NavigationContainer>
-          <RootStack />
-        </NavigationContainer>
-      </LikeContextProvider>
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
     </UserContextProvider>
   );
 }

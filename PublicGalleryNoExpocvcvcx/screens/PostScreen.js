@@ -3,7 +3,6 @@ import React from 'react';
 import {useEffect} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import PostCard from '../components/PostCard';
-import {LikeContextProvider} from '../contexts/LikeContext';
 import events from '../lib/events';
 function PostScreen() {
   const route = useRoute();
@@ -11,14 +10,16 @@ function PostScreen() {
   const {post} = route.params;
 
   useEffect(() => {
-    const handler = ({description, likedUser}) => {
-      navigation.setParams({post: {...post, description, likedUser}});
+    const handler = ({description}) => {
+      navigation.setParams({post: {...post, description}});
     };
     events.addListener('updatePost', handler);
     return () => {
       events.removeListener('updatePost', handler);
     };
   }, [post, navigation]);
+  //이벤트 발생은 버튼을 눌렀을 때
+  //반영되어야 하는 화면은 postCard
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
       <PostCard
@@ -27,7 +28,6 @@ function PostScreen() {
         description={post.description}
         createdAt={post.createdAt}
         id={post.id}
-        likedUser={post.likedUser}
       />
     </ScrollView>
   );

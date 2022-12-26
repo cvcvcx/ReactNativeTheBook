@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, useWindowDimensions, Image, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useLikeContext} from '../contexts/LikeContext';
 function PostGridItem({post}) {
   const dimensions = useWindowDimensions();
   const size = (dimensions.width - 3) / 3;

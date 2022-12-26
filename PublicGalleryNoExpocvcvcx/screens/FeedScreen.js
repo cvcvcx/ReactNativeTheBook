@@ -8,7 +8,6 @@ import {
 import PostCard from '../components/PostCard';
 import usePosts from '../hooks/usePosts';
 import SplashScreen from 'react-native-splash-screen';
-import {LikeContextProvider} from '../contexts/LikeContext';
 function FeedScreen() {
   const {posts, noMorePost, refreshing, onLoadMore, onRefresh} = usePosts();
   const postsReady = posts !== null;
